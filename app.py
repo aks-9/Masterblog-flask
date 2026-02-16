@@ -1,13 +1,17 @@
-#Create the Form
-# Create the template for add.html file. The template should contain a form that asks for the relevant details from the user, and submits a POST request to the same route - /add.
-
+#Handle POST Requests
+#When a POST request is sent, that means the user has filled out our form and submitted it. We want to take the data from the form and use it to create a new blog post.
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for#import redirect and url_for
+
 app = Flask(__name__)
 
 def load_posts():
     with open('storage.json', 'r') as file:
         return json.load(file)
+
+def save_posts(posts):
+    with open('storage.json', 'w') as file:
+        json.dump(posts, file, indent=4)
 
 @app.route('/')
 def index():
@@ -17,9 +21,17 @@ def index():
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
-    if request.method == 'POST':
-        # We will fill this in the next step
-        pass
+    if request.method == 'POST': # to get the data from our form.
+        blog_posts = load_posts()
+        new_post = {
+            "id": len(blog_posts) + 1,  # Simple way to generate a new ID
+            "author": request.form.get('author'),
+            "title": request.form.get('title'),
+            "content": request.form.get('content')
+        }
+        blog_posts.append(new_post)
+        save_posts(blog_posts)
+        return redirect(url_for('index')) #redirecting the user back to the home page to view all the blog postings.
     return render_template('add.html')
 
 
