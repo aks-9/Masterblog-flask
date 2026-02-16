@@ -1,4 +1,5 @@
-#Delete Route
+#Handle POST Requests
+#When a POST request is sent, that means the user has filled out our form and submitted it. We want to take the data from the form and use it to create a new blog post.
 import json
 from flask import Flask, render_template, request, redirect, url_for#import redirect and url_for
 
@@ -8,6 +9,7 @@ def load_posts():
     with open('storage.json', 'r') as file:
         return json.load(file)
 
+#to save the post after creating a new post
 def save_posts(posts):
     with open('storage.json', 'w') as file:
         json.dump(posts, file, indent=4)
