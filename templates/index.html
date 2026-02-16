@@ -1,3 +1,6 @@
+<!--Delete Route-->
+<!--adding a “Delete” button next to each blog post on the index page, and creating a new route to handle the deletion of blog posts.-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +16,9 @@
         <h2>{{ post.title }}</h2>
         <p><em>Written by {{ post.author }}</em></p>
         <p>{{ post.content }}</p>
+        <form action="{{ url_for('delete', post_id=post.id) }}" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
     </div>
     {% endfor %}
 </body>
