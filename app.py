@@ -1,4 +1,3 @@
-# DELETE ROUTE
 import json
 import os
 from flask import Flask, render_template, request, redirect, url_for
@@ -42,7 +41,8 @@ def add():
             "id": new_id,
             "author": request.form.get('author'),
             "title": request.form.get('title'),
-            "content": request.form.get('content')
+            "content": request.form.get('content'),
+            "likes": 0 #likes count added
         }
 
         blog_posts.append(new_post)
@@ -64,7 +64,6 @@ def delete(post_id):
     save_posts(updated_posts)
     return redirect(url_for('index'))
 
-#helper function for update route
 def fetch_post_by_id(post_id):
     """Fetch a single blog post by its ID."""
     blog_posts = load_posts()
@@ -100,6 +99,20 @@ def update(post_id):
     # Else, it's a GET request
     # So display the update.html page
     return render_template('update.html', post=post)
+
+#Like feature
+@app.route('/like/<int:post_id>')
+def like(post_id):
+    """Increment the likes count for a blog post."""
+    blog_posts = load_posts()
+    for post in blog_posts:
+        if post['id'] == post_id:
+            # Increment likes, initializing to 0 if it doesn't exist
+            post['likes'] = post.get('likes', 0) + 1
+            break
+    
+    save_posts(blog_posts)
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
