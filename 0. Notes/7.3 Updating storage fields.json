@@ -4,7 +4,7 @@
         "author": "John Doe",
         "title": "First Post",
         "content": "This is an updated post.",
-        "likes": 1
+        "likes": 0 //adding like field
     },
     {
         "id": 2,

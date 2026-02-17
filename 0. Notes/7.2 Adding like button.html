@@ -1,3 +1,4 @@
+<!--adding like to index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@
         <form action="{{ url_for('delete', post_id=post.id) }}" method="POST" style="display:inline;">
             <button type="submit">Delete</button>
         </form>
-
+        
         <a href="{{ url_for('update', post_id=post.id) }}">
             <button type="button">Update</button>
         </a>
