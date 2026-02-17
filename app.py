@@ -22,6 +22,7 @@ def save_posts(posts):
     with open(STORAGE_FILE, 'w') as file:
         json.dump(posts, file, indent=4)
 
+
 @app.route('/')
 def index():
     blog_posts = load_posts()
@@ -42,7 +43,7 @@ def add():
             "author": request.form.get('author'),
             "title": request.form.get('title'),
             "content": request.form.get('content'),
-            "likes": 0 #likes count added
+            "likes": 0  # likes count added
         }
 
         blog_posts.append(new_post)
@@ -50,6 +51,7 @@ def add():
         return redirect(url_for('index'))
 
     return render_template('add.html')
+
 
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete(post_id):
@@ -64,6 +66,7 @@ def delete(post_id):
     save_posts(updated_posts)
     return redirect(url_for('index'))
 
+
 def fetch_post_by_id(post_id):
     """Fetch a single blog post by its ID."""
     blog_posts = load_posts()
@@ -75,7 +78,6 @@ def fetch_post_by_id(post_id):
 
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 def update(post_id):
-
     # Fetch the blog posts from the JSON file
     post = fetch_post_by_id(post_id)
     if post is None:
@@ -91,7 +93,7 @@ def update(post_id):
                 p['title'] = request.form.get('title')
                 p['content'] = request.form.get('content')
                 break
-        
+
         save_posts(blog_posts)
         # Redirect back to index
         return redirect(url_for('index'))
@@ -100,7 +102,8 @@ def update(post_id):
     # So display the update.html page
     return render_template('update.html', post=post)
 
-#Like feature
+
+# Like feature
 @app.route('/like/<int:post_id>')
 def like(post_id):
     """Increment the likes count for a blog post."""
@@ -110,13 +113,10 @@ def like(post_id):
             # Increment likes, initializing to 0 if it doesn't exist
             post['likes'] = post.get('likes', 0) + 1
             break
-    
+
     save_posts(blog_posts)
     return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-
-
