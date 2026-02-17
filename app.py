@@ -1,3 +1,4 @@
+# DELETE ROUTE
 import json
 import os
 from flask import Flask, render_template, request, redirect, url_for
@@ -54,17 +55,51 @@ def add():
 def delete(post_id):
     blog_posts = load_posts()
 
-    # Create a new list to store posts we want to keep
     updated_posts = []
 
-    # Go through each post in the current list
     for post in blog_posts:
-        # If the post ID is NOT the one we want to delete, add it to our new list
         if post['id'] != post_id:
             updated_posts.append(post)
 
     save_posts(updated_posts)
     return redirect(url_for('index'))
+
+#helper function for update route
+def fetch_post_by_id(post_id):
+    """Fetch a single blog post by its ID."""
+    blog_posts = load_posts()
+    for post in blog_posts:
+        if post['id'] == post_id:
+            return post
+    return None
+
+
+@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+def update(post_id):
+
+    # Fetch the blog posts from the JSON file
+    post = fetch_post_by_id(post_id)
+    if post is None:
+        # Post not found
+        return "Post not found", 404
+
+    if request.method == 'POST':
+        # Update the post in the JSON file
+        blog_posts = load_posts()
+        for p in blog_posts:
+            if p['id'] == post_id:
+                p['author'] = request.form.get('author')
+                p['title'] = request.form.get('title')
+                p['content'] = request.form.get('content')
+                break
+        
+        save_posts(blog_posts)
+        # Redirect back to index
+        return redirect(url_for('index'))
+
+    # Else, it's a GET request
+    # So display the update.html page
+    return render_template('update.html', post=post)
 
 
 if __name__ == '__main__':
