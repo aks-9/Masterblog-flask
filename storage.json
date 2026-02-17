@@ -12,5 +12,12 @@
         "title": "Second Post",
         "content": "This is another post.",
         "likes": 0
+    },
+    {
+        "id": 3,
+        "author": "Ash",
+        "title": "Project finshed",
+        "content": "Finally whole blog is functional",
+        "likes": 4
     }
 ]
